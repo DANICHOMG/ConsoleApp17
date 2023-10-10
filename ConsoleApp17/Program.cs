@@ -1,15 +1,12 @@
 ﻿namespace voting
 {
-     static class WhoVoted {
-
-        public static List<Person> people = new List<Person>();
-    }
-
+     
     class Person
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public bool YesOrNo { get; set; }
+        public bool Yes { get; set; }
+        public bool ForNoOne { get; set; }
     }
 
 
@@ -21,14 +18,21 @@
             foreach (var person in peopleList)
             {
                 string resultofvote;
-                if (person.YesOrNo == true)
+                if (person.ForNoOne == false)
                 {
-                    resultofvote = "For";
+                    if (person.Yes == true)
+                        resultofvote = "For";
+
+                    else
+                    {
+                        resultofvote = "Against";
+                    }
                 }
                 else
                 {
-                    resultofvote = "Against";
+                    resultofvote = "For no one";
                 }
+
 
                 Console.WriteLine("List of people who voted:");
 
@@ -59,20 +63,29 @@
             Console.WriteLine("Surname: ");
             string surname = Console.ReadLine();
             bool answer = false;
-            Console.WriteLine("For/Against?");
-            if (Console.ReadLine() == "Y")
+            bool isnothing = false;
+            Console.WriteLine("For | Against | Nothing (F/A/N)?");
+            string answervariant = Console.ReadLine();
+
+            switch (answervariant)
             {
-                answer = true;
+                case "F":
+                    answer = true;
+                    break;
+                case "A":
+                    answer = false;
+                    break;
+                case "N":
+                    isnothing = true;
+                    break;
             }
-            else if (Console.ReadLine() == "N")
-            {
-                answer = false;
-            }
+      
             Person person = new Person
             {
                 FirstName = name,
                 LastName = surname,
-                YesOrNo = answer
+                Yes = answer,
+                ForNoOne = isnothing
             };
 
             peopleList.Add(person);
@@ -81,15 +94,15 @@
 
         static public void Main()
         {
-            bool ifvotealreadystarted = false;
+            bool isVoteEnded = true;
 
-            if (ifvotealreadystarted == false)
+            if (isVoteEnded == true)
             {
                 Console.WriteLine("Name of voting: ");
                 string votename = Console.ReadLine();
                 Console.WriteLine("Description of voting: ");
                 string aboutvote = Console.ReadLine();
-                ifvotealreadystarted = true;
+                isVoteEnded = false;
                 Vote(votename, aboutvote);
 
             }
